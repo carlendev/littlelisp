@@ -20,9 +20,27 @@ const splitSpace = str => str.split(spaceReg)
 
 const trim = str => str.trim()
 
+const isStringLiteral = token => (token[0] === '"' && token.slice(-1) === '"') || token[0] === '\'' && token.slice(-1) === '\''
+
 const replaceLeftRightTrimSplitSpace = compose(splitSpace, trim, replaceRight, replaceLeft)
 
 const tokenize = input => replaceLeftRightTrimSplitSpace(input)   
 
+const parenthesize = (tokens, list) => {
+    if (list === undefined) return parenthesize(tokens, [])
+    const token = tokens.shift()
+    if (token === undefined) return list.pop()
+    else if (token === '(') {
+        list.push(parenthesize(tokens, []))
+        return parenthesize(tokens, list)
+    } else if (token === ')') return list
+    return parenthesize(tokens, list.concat(indentify(token)))
+}
 
-console.log(tokenize('((lambda (x) x) "Lisp")'))
+const indentify = token => {
+    if (!isNaN(parseFloat(token))) return { type: 'literal', value: parseFloat(token) }
+    if (isStringLiteral(token)) return { type: 'literal', value: token.slice(1, -1) }
+    return { type: 'identifier', value: token }
+}
+
+console.log(JSON.stringify(parenthesize(tokenize('((lambda (x) x) "Lisp" \'Lisp\' 3)'))))
