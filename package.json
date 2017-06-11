@@ -1,0 +1,11 @@
+{
+  "name": "littlelisp",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts":{
+    "start": "node mai.js"
+  },
+  "repository": "git@github.com:carlendev/littlelisp.git",
+  "author": "Yann Carlen <yann.carlen@epitech.eu>",
+  "license": "MIT"
+}
