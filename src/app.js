@@ -85,8 +85,6 @@ const library = {
     add: ([ x, y ]) => x + y
 }
 
-console.log(interpret(parse('((lambda (x) x) "Lisp")')))
-console.log(interpret(parse('(first (1, 2))')))
-console.log(interpret(parse('(add (1, 2))')))
-console.log(interpret(parse('(if 0 1 0)')))
-console.log(interpret(parse('( if 1 ((lambda (x y) (add x y)) (1 2)) 0)')))
+const exec = compose(interpret, parse)
+
+module.exports = { interpret, parse, exec }

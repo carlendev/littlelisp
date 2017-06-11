@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts":{
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "test": "node test/test.js"
   },
   "repository": "git@github.com:carlendev/littlelisp.git",
   "author": "Yann Carlen <yann.carlen@epitech.eu>",
