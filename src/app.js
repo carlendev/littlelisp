@@ -75,14 +75,18 @@ const special = {
     lambda: (indentifiers, context) => (...args) => interpret(indentifiers[2], newContext(indentifiers[1].reduce((acc, e, i) => {
         acc[e.value] = args[i]
         return acc
-    }, {}), context))
+    }, {}), context)),
+    if: (indentifiers, context) => interpret(indentifiers[1], context) ?
+        interpret(indentifiers[2], context) : interpret(indentifiers[3], context)
 }
 
 const library = {
-    first: l => l[0],
-    add: l => l[0] + l[1]
+    first: ([ l ]) => l,
+    add: ([ x, y ]) => x + y
 }
 
 console.log(interpret(parse('((lambda (x) x) "Lisp")')))
-console.log(interpret(parse('(first (1 2))')))
-console.log(interpret(parse('(add (1 2))')))
+console.log(interpret(parse('(first (1, 2))')))
+console.log(interpret(parse('(add (1, 2))')))
+console.log(interpret(parse('(if 0 1 0)')))
+console.log(interpret(parse('(if 1 1 0)')))
