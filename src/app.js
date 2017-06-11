@@ -55,19 +55,34 @@ const context = (scope, parent) => (() => ({
     }
 }))()
 
+const newContext = context
+
 const interpret = (indentifiers, context) => {
-    if (context === undefined) return interpret(indentifiers, context(library))
-    if (input instanceof Array) return interpretList(indentifiers, context)
-    if (indentifiers.type === 'indentifier') return context.get(input.value)
-    return input.value
+    if (context === undefined) return interpret(indentifiers, newContext(library))
+    if (indentifiers instanceof Array) return interpretList(indentifiers, context)
+    if (indentifiers.type === 'identifier') return context.get(indentifiers.value)
+    return indentifiers.value
 }
 
-const evaluateList = (indentifiers, context) => {
+const interpretList = (indentifiers, context) => {
+    if (indentifiers.length > 0 && indentifiers[0].value in special) return special[indentifiers[0].value](indentifiers, context)
+    const list = indentifiers.map(e => interpret(e, context))
+    if (list[0] instanceof Function) return list[0].apply(undefined, list.slice(1))
+    return list
+}
 
+const special = {
+    lambda: (indentifiers, context) => (...args) => interpret(indentifiers[2], newContext(indentifiers[1].reduce((acc, e, i) => {
+        acc[e.value] = args[i]
+        return acc
+    }, {}), context))
 }
 
 const library = {
-
+    first: l => l[0],
+    add: l => l[0] + l[1]
 }
 
-console.log(JSON.stringify(parse('((lambda (x) x) "Lisp" \'Lisp\' 3)')))
+console.log(interpret(parse('((lambda (x) x) "Lisp")')))
+console.log(interpret(parse('(first (1 2))')))
+console.log(interpret(parse('(add (1 2))')))
