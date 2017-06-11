@@ -48,22 +48,22 @@ const indentify = token => {
 
 const parse = compose(parenthesize, tokenize)
 
-const context = (scope, parent) => () => ({
+const context = (scope, parent) => (() => ({
     get(indentifier) {
         if (indentifier in scope) return scope[indentifier]
         else if (parent !== undefined) return parent.get(indentifier)
     }
-})
+}))()
 
 const interpret = (indentifiers, context) => {
-    if (context == undefined) return interpret(indentifiers, context(library))
+    if (context === undefined) return interpret(indentifiers, context(library))
     if (input instanceof Array) return interpretList(indentifiers, context)
     if (indentifiers.type === 'indentifier') return context.get(input.value)
     return input.value
 }
 
 const evaluateList = (indentifiers, context) => {
-    
+
 }
 
 const library = {
