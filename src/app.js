@@ -65,6 +65,7 @@ const interpret = (indentifiers, context) => {
 }
 
 const interpretList = (indentifiers, context) => {
+    //console.log(indentifiers)
     if (indentifiers.length > 0 && indentifiers[0].value in special) return special[indentifiers[0].value](indentifiers, context)
     const list = indentifiers.map(e => interpret(e, context))
     if (list[0] instanceof Function) return list[0].apply(undefined, list.slice(1))
@@ -89,4 +90,4 @@ console.log(interpret(parse('((lambda (x) x) "Lisp")')))
 console.log(interpret(parse('(first (1, 2))')))
 console.log(interpret(parse('(add (1, 2))')))
 console.log(interpret(parse('(if 0 1 0)')))
-console.log(interpret(parse('(if 1 1 0)')))
+console.log(interpret(parse('( if 1 ((lambda (x y) (add x y)) (1 2)) 0)')))
