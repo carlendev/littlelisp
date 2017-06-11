@@ -65,7 +65,6 @@ const interpret = (indentifiers, context) => {
 }
 
 const interpretList = (indentifiers, context) => {
-    //console.log(indentifiers)
     if (indentifiers.length > 0 && indentifiers[0].value in special) return special[indentifiers[0].value](indentifiers, context)
     const list = indentifiers.map(e => interpret(e, context))
     if (list[0] instanceof Function) return list[0].apply(undefined, list.slice(1))
