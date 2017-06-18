@@ -85,6 +85,9 @@ const library = {
     add: ([ x, y ]) => x + y
 }
 
-const exec = compose(interpret, parse)
+const exec = userLibrary => {
+    Object.assign(library, userLibrary)
+    return compose(interpret, parse)
+}
 
-module.exports = { interpret, parse, exec }
+module.exports = { exec, parse }
